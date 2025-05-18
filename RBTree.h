@@ -9,8 +9,7 @@ private:
   Node* root;
   Node* sentinel; 
 
-  void rotateLeft(Node* node);
-  void rotateRight(Node* node);
+  void rotate(Node* node, bool isRight);
   void rebalanceTree(Node* node);
   void printHelper(Node* root, int count, bool end);
 
