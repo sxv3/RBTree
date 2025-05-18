@@ -54,5 +54,53 @@ void RBTree::rotate(Node* x, bool isRight) {
   }
 }
 
+void RBTree::rebalanceTree(Node* node) {
+    Node* node2;
+    while (node->parent->isRed) {
+      
+        if (node->parent == node->parent->parent->left) {
+            node2 = node->parent->parent->right;
+          
+            if (node2->isRed) {
+                node->parent->isRed = false;
+                node2->isRed = false;
+                node->parent->parent->isRed = true;
+                node = node->parent->parent;
 
+            } else {
+                if (node == node->parent->right) {
+                    node = node->parent;
+                    rotate(node, false);
+                }
+                node->parent->isRed = false;
+                node->parent->parent->isRed = true;
+                rotate(node->parent->parent, true);
+              
+            }
+        } else {
+            node2 = node->parent->parent->left;
+          
+            if (node2->isRed) {
+                node->parent->isRed = false;
+                node2->isRed = false;
+                node->parent->parent->isRed = true;
+                node = node->parent->parent;
+              
+            } else {
+                if (node == node->parent->left) {
+                    node = node->parent;
+                    rotate(node, true);
+                }
+              
+                node->parent->isRed = false;
+                node->parent->parent->isRed = true;
+                rotate(node->parent->parent, false);
+            }
+        }
+        if (node == root) {
+          break;
+        }
+    }
+    root->isRed = false;
+}
   
