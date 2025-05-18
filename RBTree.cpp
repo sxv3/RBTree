@@ -70,14 +70,14 @@ void RBTree::rebalanceTree(Node* newNode) {
   Node* grandParent;
   Node* uncle;
 
-  //parent is red
+  //while parent is red
   while (newNode->parent->isRed) {
     parent = newNode->parent;
     grandParent = parent->parent;
 
     if (parent == grandParent->left) {
       uncle = grandParent->right;
-      //uncle red
+      //case 1 if uncle red
       if (uncle->isRed) {
         parent->isRed = false;
         uncle->isRed = false;
@@ -85,17 +85,19 @@ void RBTree::rebalanceTree(Node* newNode) {
         newNode = grandParent;
               
       } else {
-        //new node is right
+        //case 2 if new node is right
         if (newNode == parent->right) {
           newNode = parent;
           rotate(newNode, false); //rotate left
         }
-               
+
+        //case 3
         parent->isRed = false;
         grandParent->isRed = true;
         rotate(grandParent, true); //rotate right grandparent
       }
     } else {
+      
       //mirror cases
       uncle = grandParent->left;
       if (uncle->isRed) {
