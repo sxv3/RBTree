@@ -128,3 +128,36 @@ void RBTree::rebalanceTree(Node* newNode) {
   //set root to black again
   root->isRed = false;
 }
+
+void RBTree::insert(int val) {
+  //create a red new node
+  Node* newNode = new Node(val);
+  newNode->left   = sentinel;
+  newNode->right  = sentinel;
+  newNode->parent = sentinel;    
+  newNode->isRed = true;
+
+  //insert it into the binary tree
+  Node* y = sentinel;
+  Node* x = root;
+  while (x != sentinel) {
+    y = x;
+    if (newNode->data < x->data) {
+      x = x->left;
+    } else {
+      x = x->right;
+    }
+  }
+  
+  newNode->parent = y;
+  if (y == sentinel) {
+    root = newNode;
+  } else if (newNode->data < y->data) {
+    y->left = newNode;
+  } else {
+    y->right = newNode;
+  }
+
+  //after insert, fix the tree
+  rebalanceTree(newNode);
+}
