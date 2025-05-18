@@ -17,90 +17,112 @@ RBTree::RBTree() {
 }
 
 void RBTree::rotate(Node* x, bool isRight) {
+  //left rotate
   if (isRight == false) {
+    //sets node to right side
     Node* y = x->right;
+    
+    //splice y left subtree
     x->right = y->left;
+    //if subtree isnt null
     if (y->left != sentinel) {
-      y->left->parent = x;
+      y->left->parent = x; //make sure left subtree parent points to x
     }
     
+    //y takes x's position in the tree
     y->parent = x->parent;
     if (x->parent == sentinel) {
-      root = y;
+      root = y;  //if root, then y becomes root
     } else if (x == x->parent->left) {
-      x->parent->left = y;
+      x->parent->left = y;   //otherwise y becomes the right/left child of parent depending on x
     } else {
       x->parent->right = y;
     }
-    
+    //x becomes left child of y and y becomes parent of x 
     y->left = x;
     x->parent = y;  
   } else {
+    //same thing for right side
     Node* y = x->left;
     x->left = y->right;
+    
     if (y->right != sentinel) {
-        y->right->parent = x;
+      y->right->parent = x;
     }
+    
     y->parent = x->parent;
+    
     if (x->parent == sentinel) {
-        root = y;
+      root = y;
     } else if (x == x->parent->right) {
-        x->parent->right = y;
+      x->parent->right = y;
     } else {
-        x->parent->left = y;
+      x->parent->left = y;
     }
+    
     y->right = x;
     x->parent = y;
   }
 }
 
-void RBTree::rebalanceTree(Node* node) {
-    Node* node2;
-    while (node->parent->isRed) {
-      
-        if (node->parent == node->parent->parent->left) {
-            node2 = node->parent->parent->right;
-          
-            if (node2->isRed) {
-                node->parent->isRed = false;
-                node2->isRed = false;
-                node->parent->parent->isRed = true;
-                node = node->parent->parent;
+void RBTree::rebalanceTree(Node* newNode) {
+  Node* parent;
+  Node* grandParent;
+  Node* uncle;
 
-            } else {
-                if (node == node->parent->right) {
-                    node = node->parent;
-                    rotate(node, false);
-                }
-                node->parent->isRed = false;
-                node->parent->parent->isRed = true;
-                rotate(node->parent->parent, true);
+  //parent is red
+  while (newNode->parent->isRed) {
+    parent = newNode->parent;
+    grandParent = parent->parent;
+
+    if (parent == grandParent->left) {
+      uncle = grandParent->right;
+      //uncle red
+      if (uncle->isRed) {
+        parent->isRed = false;
+        uncle->isRed = false;
+        grandParent->isRed = true;
+        newNode = grandParent;
               
-            }
-        } else {
-            node2 = node->parent->parent->left;
-          
-            if (node2->isRed) {
-                node->parent->isRed = false;
-                node2->isRed = false;
-                node->parent->parent->isRed = true;
-                node = node->parent->parent;
-              
-            } else {
-                if (node == node->parent->left) {
-                    node = node->parent;
-                    rotate(node, true);
-                }
-              
-                node->parent->isRed = false;
-                node->parent->parent->isRed = true;
-                rotate(node->parent->parent, false);
-            }
+      } else {
+        //new node is right
+        if (newNode == parent->right) {
+          newNode = parent;
+          rotate(newNode, false); //rotate left
         }
-        if (node == root) {
-          break;
+               
+        parent->isRed = false;
+        grandParent->isRed = true;
+        rotate(grandParent, true); //rotate right grandparent
+      }
+    } else {
+      //mirror cases
+      uncle = grandParent->left;
+      if (uncle->isRed) {
+        parent->isRed = false;
+        uncle->isRed = false;
+        grandParent->isRed = true;
+        newNode = grandParent;
+              
+      } else {
+        if (newNode == parent->left) {
+          newNode = parent;
+          rotate(newNode, true); //right rotate parent
         }
+              
+        parent->isRed = false;
+        grandParent->isRed = true;
+        rotate(grandParent, false); //left rotate grandparent
+              
+      }
     }
-    root->isRed = false;
-}
+    
+    //if at root then stop
+    if (newNode == root) {
+      break;
+    }
+  }
   
+  //set root to black again
+  root->isRed = false;
+}
