@@ -2,6 +2,8 @@
 #include <iostream>
 #include <fstream>
 
+using namespace std;
+
 //constructor for rbtree
 RBTree::RBTree() {
   sentinel = new Node(0);
@@ -160,4 +162,48 @@ void RBTree::insert(int val) {
 
   //after insert, fix the tree
   rebalanceTree(newNode);
+}
+
+//load file
+void RBTree::load(const char* filename) {
+  //load from filename
+  ifstream file(filename);
+  
+  int num;
+  while (file >> num) {
+    insert(num);
+  }
+}
+
+//print helper
+void RBTree::printHelper(Node* node, int count, bool end) {
+  //stops if at sentinel node
+  if (node == sentinel) {
+    return;
+  }
+  //indent
+  for (int i = 0; i < count; ++i) {
+      cout << "|   ";
+  }
+  //marks branches
+  if (end = true) {
+      cout << "X-- ";
+  } else {
+      cout << "|-- ";
+  }
+  //prints out red black value or parent
+  cout << node->data;
+  if (node->isRed) {
+    cout << "(R)";
+  } else {
+    cout << "(B)";
+  }
+  if (node->parent != sentinel) {
+    cout << "[P:" << node->parent->data << "]";
+  }
+  cout << endl;
+  
+  //run the func on children
+  printHelper(node->left,  count + 1, false);
+  printHelper(node->right, count + 1, true);
 }
