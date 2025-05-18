@@ -3,7 +3,7 @@
 //by Tai Wong, 5/17/25
 Node::Node(int val) {
   data = val;
-  color = TRUE;
+  color = true;
   left = 0;
   right = 0;
   parent = 0;
