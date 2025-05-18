@@ -207,3 +207,14 @@ void RBTree::printHelper(Node* node, int count, bool end) {
   printHelper(node->left,  count + 1, false);
   printHelper(node->right, count + 1, true);
 }
+
+//print func
+void RBTree::print() {
+  //if root is sentinel node
+  if (root == sentinel) {
+    cout << "tree is empty" << endl;
+    return;
+  }
+  //recursive func to print out tree nicely
+  printHelper(root, 0, true);
+}
