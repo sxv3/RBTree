@@ -6,25 +6,25 @@
 
 class RBTree {
 private:
+    Node* root;
+    Node* sentinel;     // sentinel leaf
 
-  Node* root;
-  
-  void rotateLeft(Node* node);
+    void rotateLeft(Node* node);
 
-  void rotateRight(Node* node);
+    void rotateRight(Node* node);
 
-  void rebalanceTree(Node* node);
+    void rebalanceTree(Node* node);
 
-  void printHelper(Node* root, int count, bool end);
+    void printHelper(Node* root, int count, bool end);
 
 public:
 
-  RBTree();
-  ~RBTree();
+    RBTree();
+    ~RBTree();
 
-  void insert(int val);
-  void load(const char* filename);
-  void print();
+    void insert(int val);
+    void load(const char* filename);
+    void print();
 };
 
 #endif
