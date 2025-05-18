@@ -186,7 +186,7 @@ void RBTree::printHelper(Node* node, int count, bool end) {
       cout << "|   ";
   }
   //marks branches
-  if (end = true) {
+  if (end == true) {
       cout << "X-- ";
   } else {
       cout << "|-- ";

@@ -16,7 +16,6 @@ private:
 public:
 
   RBTree();
-  ~RBTree();
 
   void insert(int val);
   void load(const char* filename);
