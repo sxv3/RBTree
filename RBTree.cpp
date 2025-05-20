@@ -97,6 +97,7 @@ void RBTree::rebalanceTree(Node* newNode) {
         parent->isRed = false;
         grandParent->isRed = true;
         rotateRight(grandParent); //rotate right grandparent
+        break;
       }
     } else {
       
@@ -117,6 +118,7 @@ void RBTree::rebalanceTree(Node* newNode) {
         parent->isRed = false;
         grandParent->isRed = true;
         rotateLeft(grandParent); //left rotate grandparent
+        break;
               
       }
     }
