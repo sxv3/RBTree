@@ -18,53 +18,53 @@ RBTree::RBTree() {
   root = sentinel;
 }
 
-void RBTree::rotate(Node* x, bool isRight) {
+void RBTree::rotateLeft(Node* x) {
   //left rotate
-  if (isRight == false) {
-    //sets node to right side
-    Node* y = x->right;
+  //sets node to right side
+  Node* y = x->right;
     
-    //splice y left subtree
-    x->right = y->left;
-    //if subtree isnt null
-    if (y->left != sentinel) {
-      y->left->parent = x; //make sure left subtree parent points to x
-    }
-    
-    //y takes x's position in the tree
-    y->parent = x->parent;
-    if (x->parent == sentinel) {
-      root = y;  //if root, then y becomes root
-    } else if (x == x->parent->left) {
-      x->parent->left = y;   //otherwise y becomes the right/left child of parent depending on x
-    } else {
-      x->parent->right = y;
-    }
-    //x becomes left child of y and y becomes parent of x 
-    y->left = x;
-    x->parent = y;  
-  } else {
-    //same thing for right side
-    Node* y = x->left;
-    x->left = y->right;
-    
-    if (y->right != sentinel) {
-      y->right->parent = x;
-    }
-    
-    y->parent = x->parent;
-    
-    if (x->parent == sentinel) {
-      root = y;
-    } else if (x == x->parent->right) {
-      x->parent->right = y;
-    } else {
-      x->parent->left = y;
-    }
-    
-    y->right = x;
-    x->parent = y;
+  //splice y left subtree
+  x->right = y->left;
+  //if subtree isnt null
+  if (y->left != sentinel) {
+    y->left->parent = x; //make sure left subtree parent points to x
   }
+    
+  //y takes x's position in the tree
+  y->parent = x->parent;
+  if (x->parent == sentinel) {
+    root = y;  //if root, then y becomes root
+  } else if (x == x->parent->left) {
+    x->parent->left = y;   //otherwise y becomes the right/left child of parent depending on x
+  } else {
+    x->parent->right = y;
+  }
+  //x becomes left child of y and y becomes parent of x 
+  y->left = x;
+  x->parent = y;  
+}
+
+void rotateRight(Node* node) {
+  //same thing for right side
+  Node* y = x->left;
+  x->left = y->right;
+    
+  if (y->right != sentinel) {
+    y->right->parent = x;
+  }
+    
+  y->parent = x->parent;
+    
+  if (x->parent == sentinel) {
+    root = y;
+  } else if (x == x->parent->right) {
+    x->parent->right = y;
+  } else {
+    x->parent->left = y;
+  }
+    
+  y->right = x;
+  x->parent = y;
 }
 
 void RBTree::rebalanceTree(Node* newNode) {
@@ -90,13 +90,13 @@ void RBTree::rebalanceTree(Node* newNode) {
         //case 2 if new node is right
         if (newNode == parent->right) {
           newNode = parent;
-          rotate(newNode, false); //rotate left
+          rotateLeft(newNode); //rotate left
         }
 
         //case 3
         parent->isRed = false;
         grandParent->isRed = true;
-        rotate(grandParent, true); //rotate right grandparent
+        rotateRight(grandParent); //rotate right grandparent
       }
     } else {
       
@@ -111,12 +111,12 @@ void RBTree::rebalanceTree(Node* newNode) {
       } else {
         if (newNode == parent->left) {
           newNode = parent;
-          rotate(newNode, true); //right rotate parent
+          rotateRight(newNode); //right rotate parent
         }
               
         parent->isRed = false;
         grandParent->isRed = true;
-        rotate(grandParent, false); //left rotate grandparent
+        rotateLeft(grandParent); //left rotate grandparent
               
       }
     }
