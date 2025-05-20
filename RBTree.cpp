@@ -94,9 +94,13 @@ void RBTree::rebalanceTree(Node* newNode) {
         }
 
         //case 3
-        parent->isRed = false;
-        grandParent->isRed = true;
-        rotateRight(grandParent); //rotate right grandparent
+        Node* p = newNode->parent;
+        Node* g = p->parent;
+
+        p->isRed = false;   // e.g. 20 → black
+        g->isRed = true;    // e.g. 30 → red
+        rotateRight(g); //rotate right grandparent
+        
         break;
       }
     } else {
@@ -115,11 +119,14 @@ void RBTree::rebalanceTree(Node* newNode) {
           rotateRight(newNode); //right rotate parent
         }
               
-        parent->isRed = false;
-        grandParent->isRed = true;
-        rotateLeft(grandParent); //left rotate grandparent
+        Node* p = newNode->parent;
+        Node* g = p->parent;
+
+        p->isRed = false;   // e.g. 20 → black
+        g->isRed = true;    // e.g. 30 → red
+        rotateLeft(g); //left rotate grandparent
+        
         break;
-              
       }
     }
     
