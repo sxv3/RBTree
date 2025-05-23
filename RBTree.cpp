@@ -243,3 +243,11 @@ bool RBTree::search(int val) {
   }
   return false;
 }
+
+//finds mininum node
+Node* RBTree::treeMinimum(Node* node) {
+    while (node->left != sentinel) {
+        node = node->left;
+    }
+    return node;
+}
