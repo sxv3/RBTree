@@ -378,3 +378,22 @@ void RBTree::deleteNode(Node* node) {
     fixDelete(x);
   }
 }
+
+//remove func
+void RBTree::remove(int val) {
+  Node* target = root;
+
+  //finds the node that matches the value
+  while (target != sentinel && target->data != val) {
+    if (val < target->data) {
+      target = target->left;
+    } else {
+      target = target->right;
+    }
+  }
+  if (target == sentinel) {
+    return;
+  }
+  //deletes the node
+  deleteNode(target);
+}
