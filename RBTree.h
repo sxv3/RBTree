@@ -14,6 +14,11 @@ private:
   void rebalanceTree(Node* node);
   void printHelper(Node* root, int count, bool end);
 
+  void deleteNode(Node* node);
+  void rbTransplant(Node* node1, Node* node2);
+  Node* treeMinimum(Node* node);
+  void fixDelete(Node* node);
+
 public:
 
   RBTree();
@@ -21,6 +26,9 @@ public:
   void insert(int val);
   void load(const char* filename);
   void print();
+
+  bool search(int val);
+  void remove(int val);
 };
 
 #endif
