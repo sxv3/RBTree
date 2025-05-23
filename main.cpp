@@ -14,9 +14,11 @@ int main() {
   //give options to user
   cout << "1->load from input.txt" << endl;
   cout << "2->insert a number" << endl;
-  cout << "3->print tree" << endl;
-  cout << "4->exit" << endl;
-
+  cout << "3->delete a number" << endl;
+  cout << "4->search for a number" << endl;
+  cout << "5->print tree" << endl;
+  cout << "6->exit" << endl;
+  
   //runs program until user wants to stop
   while (true) {
     cout << "enter choice";
@@ -31,8 +33,23 @@ int main() {
       tree.insert(val);
       cout << "value inserted" << endl;
     } else if (choice == 3) {
-      tree.print();
+      cout << "enter number to delete: ";
+      cin >> val;
+      tree.remove(val);
+      cout << "value deleted" << endl;
     } else if (choice == 4) {
+      cout << "enter number to search: ";
+      cin >> val;
+      bool exist = tree.search(val);
+      
+      if (exist == true) {
+        cout << "number exists in tree" << endl;
+      } else {
+        cout << "number does not exist in tree" << endl;
+      }
+    } else if (choice == 5) {
+      tree.print();
+    } else if (choice == 6) {
       break;
     } else {
       cout << "bad input" << endl;
