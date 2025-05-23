@@ -227,3 +227,19 @@ void RBTree::print() {
   //recursive func to print out tree nicely
   printHelper(root, 0, true);
 }
+
+//search func
+bool RBTree::search(int val) {
+  Node* current = root;
+  //searches to see if a value exists in tree
+  while (current != sentinel) {
+    if (val == current->data) {
+      return true;
+    } else if (val < current->data) {
+      current = current->left;
+    } else {
+      current = current->right;
+    }
+  }
+  return false;
+}
