@@ -263,3 +263,76 @@ void RBTree::rbTransplant(Node* node1, Node* node2) {
   }
   node2->parent = node1->parent;
 }
+
+//fixes deletion
+void RBTree::fixDelete(Node* node) {
+  while (node != root && !node->isRed) {
+    if (node == node->parent->left) {
+      Node* sibling = node->parent->right;
+
+      //case 1 if sibling is red
+      //rotates parent left to make sibling black and reduce to other cases
+      if (sibling->isRed) {
+        sibling->isRed = false;
+        node->parent->isRed = true;
+        rotateLeft(node->parent);
+        sibling = node->parent->right;
+      }
+
+      //case 2 uif sibling and siblings children are black
+      //recolor sibling to red and move up tree
+      if (!sibling->left->isRed && !sibling->right->isRed) {
+        sibling->isRed = true;
+        node = node->parent;
+      } else {
+        //case 3 sibling is black and sibling right child is black and sibling left child is red
+        //rotate sibling right and swap colors to convert to case 4
+        if (!sibling->right->isRed) {
+          sibling->left->isRed = false;
+          sibling->isRed = true;
+          rotateRight(sibling);
+          sibling = node->parent->right;
+        }
+
+        //case 4 sibling is black and sibling right child is red
+        //recolor and rotate to fix
+        sibling->isRed = node->parent->isRed;
+        node->parent->isRed = false;
+        sibling->right->isRed = false;
+        rotateLeft(node->parent);
+        node = root;
+        //loop exits here
+      }
+    } else {
+      //mirror cases
+      Node* sibling = node->parent->left;
+
+      if (sibling->isRed) {
+        sibling->isRed = false;
+        node->parent->isRed = true;
+        rotateRight(node->parent);
+        sibling = node->parent->left;
+      }
+
+      if (!sibling->left->isRed && !sibling->right->isRed) {
+        sibling->isRed = true;
+        node = node->parent;
+        
+      } else {
+        if (!sibling->left->isRed) {
+          sibling->right->isRed = false;
+          sibling->isRed = true;
+          rotateLeft(sibling);
+          sibling = node->parent->left;
+        }
+
+        sibling->isRed = node->parent->isRed;
+        node->parent->isRed = false;
+        sibling->left->isRed = false;
+        rotateRight(node->parent);
+        node = root;
+      }
+    }
+  }
+  node->isRed = false; //removes the extra black
+}
