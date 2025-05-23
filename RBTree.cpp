@@ -267,6 +267,7 @@ void RBTree::rbTransplant(Node* node1, Node* node2) {
 //fixes deletion
 void RBTree::fixDelete(Node* node) {
   while (node != root && !node->isRed) {
+    
     if (node == node->parent->left) {
       Node* sibling = node->parent->right;
 
@@ -281,13 +282,13 @@ void RBTree::fixDelete(Node* node) {
 
       //case 2 uif sibling and siblings children are black
       //recolor sibling to red and move up tree
-      if (!sibling->left->isRed && !sibling->right->isRed) {
+      if ((sibling->left->isRed == false) && (sibling->right->isRed == false)) {
         sibling->isRed = true;
         node = node->parent;
       } else {
         //case 3 sibling is black and sibling right child is black and sibling left child is red
         //rotate sibling right and swap colors to convert to case 4
-        if (!sibling->right->isRed) {
+        if (sibling->right->isRed == false) {
           sibling->left->isRed = false;
           sibling->isRed = true;
           rotateRight(sibling);
@@ -314,12 +315,12 @@ void RBTree::fixDelete(Node* node) {
         sibling = node->parent->left;
       }
 
-      if (!sibling->left->isRed && !sibling->right->isRed) {
+      if ((sibling->left->isRed == false) && (sibling->right->isRed == false)) {
         sibling->isRed = true;
         node = node->parent;
         
       } else {
-        if (!sibling->left->isRed) {
+        if (sibling->left->isRed == false) {
           sibling->right->isRed = false;
           sibling->isRed = true;
           rotateLeft(sibling);
@@ -335,4 +336,45 @@ void RBTree::fixDelete(Node* node) {
     }
   }
   node->isRed = false; //removes the extra black
+}
+
+//delete node func
+void RBTree::deleteNode(Node* node) {
+  Node* y = node; //y node is the node that will be deleted
+  Node* x; //replacement node for y
+  bool originalColor = y->isRed; //save original color incase of needing to fix tree
+  
+  //case 1 and 2 node has 1 real child
+  if (node->left == sentinel) {
+    x = node->right;
+    rbTransplant(node, node->right);
+  } else if (node->right == sentinel) {
+    x = node->left;
+    rbTransplant(node, node->left);
+  } else {
+    
+    //case 3 node has 2 children
+    y = treeMinimum(node->right); //sucessor node
+    originalColor = y->isRed;
+    x = y->right;
+
+    if (y->parent == node) {
+      x->parent = y;
+    } else {
+      rbTransplant(y, y->right);
+      y->right = node->right;
+      y->right->parent = y;
+    }
+
+    rbTransplant(node, y);
+    y->left = node->left;
+    y->left->parent = y;
+    y->isRed = node->isRed; 
+  }
+
+  delete node;
+  //if it is black then tree needs to be fixed
+  if (originalColor == false) {
+    fixDelete(x);
+  }
 }
