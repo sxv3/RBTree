@@ -246,8 +246,20 @@ bool RBTree::search(int val) {
 
 //finds mininum node
 Node* RBTree::treeMinimum(Node* node) {
-    while (node->left != sentinel) {
-        node = node->left;
-    }
-    return node;
+  while (node->left != sentinel) {
+    node = node->left;
+  }
+  return node;
+}
+
+//replaces one subtree with another
+void RBTree::rbTransplant(Node* node1, Node* node2) {
+  if (node1->parent == sentinel) {
+    root = node2;
+  } else if (node1 == node1->parent->left) {
+    node1->parent->left = node2;
+  } else {
+    node1->parent->right = node2;
+  }
+  node2->parent = node1->parent;
 }
